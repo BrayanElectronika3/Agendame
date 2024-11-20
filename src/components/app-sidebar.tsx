@@ -18,9 +18,9 @@ import {
 
 // Header and Fotter
 const data = {
-  user: { name: "User 123", email: "user123@example.com", avatar: "user.svg", },
+  user: { name: "Usuario 123", email: "usuario123@example.com", avatar: "user.svg", },
   teams: [
-    { name: "AGENDAME", logo: Calendar1Icon, plan: "Premium", },
+    { name: "AGENDAME", logo: Calendar1Icon, plan: "Pro", },
   ],
 }
 
