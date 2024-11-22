@@ -63,7 +63,7 @@ export interface EventCalendar {
   end: Date;
   allDay: boolean;
   description: string;
-  direction: string;
+  headquearters: string;
   selectItem: boolean;
 }
 
