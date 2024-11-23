@@ -37,9 +37,6 @@ export const useAppointmentStore = create<AppointmentStore>((set) => ({
         generateAppointment('Cita 2', 0, 2, 'Programada en el consultorio 2', 'Cucuta'),
         generateAppointment('Cita 3', 2, 2, 'Programada en el consultorio 3', 'Tolima'),
         generateAppointment('Cita 4', 3, 2, 'Programada en el consultorio 10', 'Barranquilla'),
-        generateAppointment('Cita 2', 0, 2, 'Programada en el consultorio 2', 'Cucuta'),
-        generateAppointment('Cita 3', 2, 2, 'Programada en el consultorio 3', 'Tolima'),
-        generateAppointment('Cita 4', 3, 2, 'Programada en el consultorio 10', 'Barranquilla'),
     ],
 
     selectItems: (value: string) => {

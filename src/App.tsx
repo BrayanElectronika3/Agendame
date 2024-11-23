@@ -1,12 +1,10 @@
-import Layout from './app/layout'
+import AppointmentsPage from './page/appointmentsPage/AppointmentsPage'
 
 import './App.css'
 
 function App() {
   return (
-    <>
-      <Layout></Layout>
-    </>
+    <AppointmentsPage></AppointmentsPage>
   )
 }
 

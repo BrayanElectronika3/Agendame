@@ -2,6 +2,8 @@ import { Calendar, momentLocalizer } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import moment from 'moment'
 
+import { Appointment } from '@/store/appointmentStore'
+
 import './index.css'
 
 moment.locale('es')
@@ -11,21 +13,11 @@ moment.updateLocale('es', {
   weekdays: 'Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado'.split('_'),
   weekdaysShort: 'Dom_Lun_Mar_Mié_Jue_Vie_Sáb'.split('_'),
   weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sá'.split('_'),
-});
-
-// interface Props {
-//     title: string;
-//     start: Date;
-//     end: Date;
-//     allDay: boolean;
-//     description: string;
-//     direction: string;
-// }
+})
 
 interface BigCalendarProps {
-    // events: Props[];
-    events: EventCalendar[];
-    onEventSelect: (event: EventCalendar) => void;
+  appointments: Appointment[]
+  onEventSelect: (event: Appointment) => void
 }
 
 interface eventProps {
@@ -33,14 +25,6 @@ interface eventProps {
 }
 
 const localizer = momentLocalizer(moment)
-
-const components = {
-  event: (props: eventProps) => {
-    return <div>
-      <p className='text-sm'>{props.title}</p>
-    </div>
-  }
-}
 
 const messages = {
   allDay: "Todo el día",
@@ -57,19 +41,12 @@ const messages = {
   noEventsInRange: "Sin eventos"
 }
 
-export interface EventCalendar {
-  title: string;
-  start: Date;
-  end: Date;
-  allDay: boolean;
-  description: string;
-  headquearters: string;
-  selectItem: boolean;
+const components = {
+  event: (props: eventProps) => (<div><p className='text-sm'>{props.title}</p></div>)
 }
 
-const BigCalendar = ({ events, onEventSelect }: BigCalendarProps) => {
-  
-  const handleSelectEvent = (event: EventCalendar) => {
+const BigCalendar = ({ appointments, onEventSelect }: BigCalendarProps) => {
+  const handleSelectEvent = (event: Appointment) => {
     if (onEventSelect) {
       onEventSelect(event)
     }
@@ -79,7 +56,7 @@ const BigCalendar = ({ events, onEventSelect }: BigCalendarProps) => {
     <div style={{ height: 500, color: 'black', backgroundColor: '#ffffff', width: '100%'}}>
       <Calendar
         localizer={localizer}
-        events={events}
+        events={appointments}
         startAccessor="start"
         endAccessor="end"
         // Seleccionar que pestañas se ven de seleccion
@@ -103,4 +80,12 @@ const BigCalendar = ({ events, onEventSelect }: BigCalendarProps) => {
   )
 }
 
-export default BigCalendar
+const CalendarAppointment = ({ appointments, onEventSelect }: BigCalendarProps) => {
+  return (
+    <div className="p-1 bg-gray-100 rounded-md shadow-md m-1 mr-0">
+      <BigCalendar appointments={appointments} onEventSelect={onEventSelect}/>
+    </div>
+  )
+}
+
+export default CalendarAppointment

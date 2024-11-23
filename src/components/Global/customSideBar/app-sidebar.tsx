@@ -1,7 +1,7 @@
 import { Calendar, Home, Inbox, Settings, Calendar1Icon } from "lucide-react"
 
-import { AppUser } from "@/components/customSideBar/app-user"
-import { AppSwitcher } from "@/components/customSideBar/app-switcher"
+import { AppUser } from "@/components/Global/customSideBar/app-user"
+import { AppSwitcher } from "@/components/Global/customSideBar/app-switcher"
 
 import {
   Sidebar,
