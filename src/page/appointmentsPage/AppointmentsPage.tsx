@@ -1,5 +1,3 @@
-import { useShallow } from 'zustand/react/shallow'
-
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 
 import { AppSidebar } from "@/components/Global/customSideBar/app-sidebar"
@@ -7,21 +5,9 @@ import Header from "@/components/Global/customHeader/header"
 
 import ButtonAppointment from "@/components/Appointments/customButton/ButtonAppointment"
 import CarrouselAppointment from "@/components/Appointments/customCarousel/CarouselAppointment"
-import CalendarAppointment from "@/components/Appointments/customCalendar/big-calendar"
-
-import { useAppointmentStore, Appointment } from '../../store/appointmentStore'
+import CalendarAppointment from "@/components/Appointments/customCalendar/calendarAppointment"
 
 export default function Layout() {
-  const { appointments } = useAppointmentStore(useShallow((state) => ({
-    appointments: state.appointments
-  })))
-
-  const selectItems = useAppointmentStore(state => state.selectItems)
-
-  const handleEventSelect = (appointment: Appointment) => {
-    selectItems(appointment.title)
-  }
-
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -32,9 +18,9 @@ export default function Layout() {
             {/* Encabezado botones de interaccion */}
             <ButtonAppointment/>
             {/* Contenido de las cartas con interaccion de carousel */}
-            <CarrouselAppointment appointments={appointments} />
+            <CarrouselAppointment/>
             {/* Calendario personalizado */}
-            <CalendarAppointment appointments={appointments} onEventSelect={handleEventSelect}/>
+            <CalendarAppointment/>
           </div>          
         </div>
       </SidebarInset>

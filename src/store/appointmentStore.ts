@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { produce } from 'immer'
+import { subscribeWithSelector } from "zustand/middleware"
 
 export interface Appointment {
     title: string
@@ -31,7 +32,7 @@ const generateAppointment = ( title: string, startOffsetDays: number, durationHo
     }
 }
 
-export const useAppointmentStore = create<AppointmentStore>((set) => ({
+export const useAppointmentStore = create(subscribeWithSelector<AppointmentStore>((set) => ({
     appointments: [
         generateAppointment('Cita 1', -2, 2, 'Programada en el consultorio 1', 'Bogota'),
         generateAppointment('Cita 2', 0, 2, 'Programada en el consultorio 2', 'Cucuta'),
@@ -40,17 +41,18 @@ export const useAppointmentStore = create<AppointmentStore>((set) => ({
     ],
 
     selectItems: (value: string) => {
+        if (typeof value !== "string" || !value.trim()) {
+            console.error("Error: El valor proporcionado no es válido")
+            return
+        }
+    
         set(
             produce((state: AppointmentStore) => {
-                if (!value || typeof value !== 'string') {
-                    console.error('Error: El valor proporcionado no es valido')
-                    return null
-                }
-
-                state.appointments.forEach((appointment) => {
-                    appointment.selectItem = appointment.title === value
-                })
+                state.appointments = state.appointments.map((item) => ({
+                    ...item,
+                    selectItem: item.title === value,
+                }))
             })
         )
-    }
-}))
+    },
+})))

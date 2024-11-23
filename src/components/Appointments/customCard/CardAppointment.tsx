@@ -1,3 +1,5 @@
+import { memo } from "react"
+
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card"
 import { Appointment } from "@/store/appointmentStore"
 
@@ -5,7 +7,7 @@ interface CardAppointmentProps {
     appointment: Appointment
 }
 
-const CardAppointment = ({ appointment }: CardAppointmentProps) => {
+const CardAppointment = memo(({ appointment }: CardAppointmentProps) => {
     const { title, description, headquearters, start, selectItem } = appointment
 
     return (
@@ -20,6 +22,6 @@ const CardAppointment = ({ appointment }: CardAppointmentProps) => {
             </CardContent>
         </Card>        
     )
-}
+})
 
 export default CardAppointment

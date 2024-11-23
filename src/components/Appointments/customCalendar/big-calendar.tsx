@@ -1,3 +1,4 @@
+import { useState, useRef } from 'react'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import moment from 'moment'
@@ -15,7 +16,7 @@ moment.updateLocale('es', {
   weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sá'.split('_'),
 })
 
-interface BigCalendarProps {
+export interface BigCalendarProps {
   appointments: Appointment[]
   onEventSelect: (event: Appointment) => void
 }
@@ -46,9 +47,14 @@ const components = {
 }
 
 const BigCalendar = ({ appointments, onEventSelect }: BigCalendarProps) => {
+  const [selected, setSelected] = useState<Appointment>()
+  const selectPrevious = useRef<Appointment>()
+
   const handleSelectEvent = (event: Appointment) => {
     if (onEventSelect) {
       onEventSelect(event)
+      selectPrevious.current = event
+      setSelected(selectPrevious.current)
     }
   }
 
@@ -75,17 +81,10 @@ const BigCalendar = ({ appointments, onEventSelect }: BigCalendarProps) => {
         messages={messages}
         // Manejo de eventos
         onSelectEvent={handleSelectEvent}
+        selected={selected}
       />
     </div>
   )
 }
 
-const CalendarAppointment = ({ appointments, onEventSelect }: BigCalendarProps) => {
-  return (
-    <div className="p-1 bg-gray-100 rounded-md shadow-md m-1 mr-0">
-      <BigCalendar appointments={appointments} onEventSelect={onEventSelect}/>
-    </div>
-  )
-}
-
-export default CalendarAppointment
+export default BigCalendar
