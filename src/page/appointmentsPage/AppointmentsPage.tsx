@@ -5,7 +5,7 @@ import Header from "@/components/Global/customHeader/header"
 
 import ButtonAppointment from "@/components/Appointments/customButton/ButtonAppointment"
 import CarrouselAppointment from "@/components/Appointments/customCarousel/CarouselAppointment"
-import CalendarAppointment from "@/components/Appointments/customCalendar/calendarAppointment"
+import CalendarAppointment from "@/components/Appointments/customCalendar/CalendarAppointment"
 
 export default function Layout() {
   return (
