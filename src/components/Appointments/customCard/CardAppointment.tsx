@@ -1,23 +1,29 @@
 import { memo } from "react"
 
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card"
-import { Appointment } from "@/store/appointmentStore"
+
+import { Appointment, useAppointmentStore } from "@/store/appointmentStore"
 
 interface CardAppointmentProps {
     appointment: Appointment
 }
 
 const CardAppointment = memo(({ appointment }: CardAppointmentProps) => {
-    const { title, description, headquearters, start, selectItem } = appointment
+    const { title, description, headquarters, start, selectItem } = appointment
+    const selectItems = useAppointmentStore((state) => state.selectItems)
+
+    const handleClick = () => {
+        selectItems(title)
+    }
 
     return (
-        <Card className={`w-full overflow-auto mr-2 ${selectItem ? 'bg-blue-100' : 'bg-white'}`} >
+        <Card className={`w-full overflow-auto mr-2 ${selectItem ? 'bg-blue-100' : 'bg-white'}`} onClick={handleClick}>
             <CardHeader>
                 <CardTitle>{title}</CardTitle>
                 <CardDescription className="text-xs">{description}</CardDescription>
             </CardHeader>
             <CardContent className="text-xs p-2">
-                <p><strong>Sede: </strong>{headquearters}</p>
+                <p><strong>Sede: </strong>{headquarters}</p>
                 <p><strong>Fecha y hora: </strong>{start.toLocaleString().toString()}</p>
             </CardContent>
         </Card>        

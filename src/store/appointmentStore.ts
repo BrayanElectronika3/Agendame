@@ -8,16 +8,17 @@ export interface Appointment {
     end: Date
     allDay: boolean
     description: string
-    headquearters: string
+    headquarters: string
     selectItem: boolean
 }
 
 interface AppointmentStore {
     appointments: Appointment[]
     selectItems: (value: string) => void
+    currentSelection: Appointment | null
 }
 
-const generateAppointment = ( title: string, startOffsetDays: number, durationHours: number, description: string, headquearters: string): Appointment => {
+const generateAppointment = ( title: string, startOffsetDays: number, durationHours: number, description: string, headquarters: string): Appointment => {
     const now = new Date()
     const start = new Date(now.setDate(now.getDate() + startOffsetDays))
     const end = new Date(start.getTime() + durationHours * 60 * 60 * 1000)
@@ -27,7 +28,7 @@ const generateAppointment = ( title: string, startOffsetDays: number, durationHo
         end,
         allDay: false,
         description,
-        headquearters,
+        headquarters,
         selectItem: false,
     }
 }
@@ -48,11 +49,29 @@ export const useAppointmentStore = create(subscribeWithSelector<AppointmentStore
     
         set(
             produce((state: AppointmentStore) => {
-                state.appointments = state.appointments.map((item) => ({
-                    ...item,
-                    selectItem: item.title === value,
-                }))
+                // Si el elemento seleccionado ya es el mismo en `currentSelection`, lo deselecciona
+                if (state.currentSelection?.title === value) {
+                    // Desmarcar todos los elementos
+                    state.currentSelection = null
+                    state.appointments = state.appointments.map((item) => ({
+                        ...item,
+                        selectItem: false,
+                    }))
+
+                // Actualiza los elementos seleccionados y establece el nuevo `currentSelection`
+                } else {
+                    state.appointments = state.appointments.map((item) => ({
+                        ...item,
+                        selectItem: item.title === value,
+                    }))
+
+                    state.currentSelection = state.appointments.find(
+                        (item) => item.title === value
+                    ) || null
+                }
             })
         )
     },
+
+    currentSelection: null,
 })))

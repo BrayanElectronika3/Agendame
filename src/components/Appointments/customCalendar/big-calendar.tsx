@@ -1,4 +1,3 @@
-import { useState, useRef } from 'react'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import moment from 'moment'
@@ -7,6 +6,14 @@ import { Appointment } from '@/store/appointmentStore'
 
 import './index.css'
 
+// Interfaz para big calendar props
+interface BigCalendarProps {
+  appointments: Appointment[]
+  onEventSelect: (event: Appointment) => void
+  currentSelection: Appointment | null
+}
+
+// Configuracion de idioma para big calendar
 moment.locale('es')
 moment.updateLocale('es', {
   months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
@@ -15,15 +22,6 @@ moment.updateLocale('es', {
   weekdaysShort: 'Dom_Lun_Mar_Mié_Jue_Vie_Sáb'.split('_'),
   weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sá'.split('_'),
 })
-
-export interface BigCalendarProps {
-  appointments: Appointment[]
-  onEventSelect: (event: Appointment) => void
-}
-
-interface eventProps {
-  title: string;
-}
 
 const localizer = momentLocalizer(moment)
 
@@ -42,19 +40,20 @@ const messages = {
   noEventsInRange: "Sin eventos"
 }
 
+// Interface y objeto para visualizacion de eventos sobre el calendario
+interface eventProps {
+  title: string
+}
+
 const components = {
   event: (props: eventProps) => (<div><p className='text-sm'>{props.title}</p></div>)
 }
 
-const BigCalendar = ({ appointments, onEventSelect }: BigCalendarProps) => {
-  const [selected, setSelected] = useState<Appointment>()
-  const selectPrevious = useRef<Appointment>()
-
-  const handleSelectEvent = (event: Appointment) => {
-    if (onEventSelect) {
+// Componente calendario
+const BigCalendar = ({ appointments, onEventSelect, currentSelection }: BigCalendarProps) => {
+  const handleSelectEvent = (event: Appointment | null) => {
+    if (onEventSelect && event !== null) {
       onEventSelect(event)
-      selectPrevious.current = event
-      setSelected(selectPrevious.current)
     }
   }
 
@@ -81,7 +80,7 @@ const BigCalendar = ({ appointments, onEventSelect }: BigCalendarProps) => {
         messages={messages}
         // Manejo de eventos
         onSelectEvent={handleSelectEvent}
-        selected={selected}
+        selected={currentSelection}
       />
     </div>
   )
