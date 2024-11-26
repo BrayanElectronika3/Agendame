@@ -9,11 +9,11 @@ interface CardAppointmentProps {
 }
 
 const CardAppointment = memo(({ appointment }: CardAppointmentProps) => {
-    const { title, description, headquarters, start, selectItem } = appointment
+    const { id, title, description, headquarters, start, selectItem } = appointment
     const selectItems = useAppointmentStore((state) => state.selectItems)
 
     const handleClick = () => {
-        selectItems(title)
+        selectItems(id)
     }
 
     return (

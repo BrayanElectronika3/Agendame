@@ -8,7 +8,7 @@ const CalendarAppointment = () => {
     const currentSelection = useAppointmentStore((state) => state.currentSelection) 
 
     const handleEventSelect = (appointment: Appointment) => {
-        selectItems(appointment.title)
+        selectItems(appointment.id)
     }
 
     return (

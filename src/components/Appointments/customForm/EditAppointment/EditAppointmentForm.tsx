@@ -39,24 +39,28 @@ type FormData = {
     headquarters: string
 }
 
-const AddAppointmentForm = () => {
+const EditAppointmentForm = () => {
     const { register, handleSubmit, control, formState: { errors } } = useForm<FormData>()
-    const addAppointment = useAppointmentStore((state) => state.addAppointment)
+    const editAppointment = useAppointmentStore((state) => state.editAppointment)
+    const currentSelection = useAppointmentStore((state) => state.currentSelection)
     const { closeSheet } = useCustomSheet()
 
     const onSubmit = (data: FormData) => {
-        const newAppointment: Appointment = {
-            id: 5,
-            title: data.title,
-            start: data.start,
-            end: data.end,
-            allDay: false,
-            description: data.description,
-            headquarters: data.headquarters,
-            selectItem: false
+        if (currentSelection)
+        {
+            const newAppointment: Appointment = {
+                id: currentSelection.id,
+                title: data.title,
+                start: data.start,
+                end: data.end,
+                allDay: false,
+                description: data.description,
+                headquarters: data.headquarters,
+                selectItem: false
+            }
+            editAppointment(currentSelection.id, newAppointment)
+            closeSheet()
         }
-        addAppointment(newAppointment)
-        closeSheet()
     }
 
     return (
@@ -65,7 +69,7 @@ const AddAppointmentForm = () => {
             <FormField label="Nombre:" htmlFor="title" error={errors.title}>
                 <Input 
                     id="title" 
-                    defaultValue="" 
+                    defaultValue={currentSelection?.title}
                     {...register("title", { required: "El nombre es obligatorio" })} 
                 />
             </FormField>
@@ -73,7 +77,7 @@ const AddAppointmentForm = () => {
             <FormField label="Descripción:" htmlFor="description" error={errors.description}>
                 <Input 
                     id="description" 
-                    defaultValue="" 
+                    defaultValue={currentSelection?.description}
                     {...register("description", { required: "La descripción es obligatoria" })} 
                 />
             </FormField>
@@ -82,6 +86,7 @@ const AddAppointmentForm = () => {
                 <Controller
                     name="start"
                     control={control}
+                    defaultValue={currentSelection?.start}
                     rules={{ required: "La fecha y hora inicial es obligatoria" }}
                     render={({ field }) => <DateTimePicker {...field} />}
                 />
@@ -91,6 +96,7 @@ const AddAppointmentForm = () => {
                 <Controller
                     name="end"
                     control={control}
+                    defaultValue={currentSelection?.end}
                     rules={{ required: "La fecha y hora final es obligatoria" }}
                     render={({ field }) => <DateTimePicker {...field} />}
                 />
@@ -101,6 +107,7 @@ const AddAppointmentForm = () => {
                     name="headquarters"
                     control={control}
                     rules={{ required: "La sede es obligatoria" }}
+                    defaultValue={currentSelection?.headquarters}
                     render={({ field }) => (
                         <Select onValueChange={(value) => field.onChange(value)} value={field.value}>
                             <SelectTrigger>
@@ -124,4 +131,4 @@ const AddAppointmentForm = () => {
     )
 }
 
-export default AddAppointmentForm
+export default EditAppointmentForm

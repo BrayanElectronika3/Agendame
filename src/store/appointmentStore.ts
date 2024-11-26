@@ -1,8 +1,9 @@
 import { create } from 'zustand'
-import { produce } from 'immer'
 import { subscribeWithSelector } from "zustand/middleware"
+import { produce } from 'immer'
 
 export interface Appointment {
+    id: number
     title: string
     start: Date
     end: Date
@@ -14,15 +15,27 @@ export interface Appointment {
 
 interface AppointmentStore {
     appointments: Appointment[]
-    selectItems: (value: string) => void
     currentSelection: Appointment | null
+
+    selectItems: (idAppointment: number) => void
+    addAppointment: (appointment: Appointment) => void
+    editAppointment: (idAppointment: number, updatedFields: Partial<Appointment>) => void
+    deleteAppointment: (idAppointment: number) => void
 }
 
-const generateAppointment = ( title: string, startOffsetDays: number, durationHours: number, description: string, headquarters: string): Appointment => {
+const generateAppointment = ( 
+        id: number, 
+        title: string, 
+        startOffsetDays: number, 
+        durationHours: number, 
+        description: string, 
+        headquarters: string
+    ): Appointment => {
     const now = new Date()
     const start = new Date(now.setDate(now.getDate() + startOffsetDays))
     const end = new Date(start.getTime() + durationHours * 60 * 60 * 1000)
     return {
+        id,
         title,
         start,
         end,
@@ -35,43 +48,96 @@ const generateAppointment = ( title: string, startOffsetDays: number, durationHo
 
 export const useAppointmentStore = create(subscribeWithSelector<AppointmentStore>((set) => ({
     appointments: [
-        generateAppointment('Cita 1', -2, 2, 'Programada en el consultorio 1', 'Bogota'),
-        generateAppointment('Cita 2', 0, 2, 'Programada en el consultorio 2', 'Cucuta'),
-        generateAppointment('Cita 3', 2, 2, 'Programada en el consultorio 3', 'Tolima'),
-        generateAppointment('Cita 4', 3, 2, 'Programada en el consultorio 10', 'Barranquilla'),
+        generateAppointment(1, 'Cita 1', -2, 2, 'Programada en el consultorio 1', 'Bogota'),
+        generateAppointment(2, 'Cita 2', 0, 2, 'Programada en el consultorio 2', 'Cucuta'),
+        generateAppointment(3, 'Cita 3', 2, 2, 'Programada en el consultorio 3', 'Tolima'),
+        generateAppointment(4, 'Cita 4', 3, 2, 'Programada en el consultorio 10', 'Barranquilla'),
     ],
+    
+    currentSelection: null,
 
-    selectItems: (value: string) => {
-        if (typeof value !== "string" || !value.trim()) {
-            console.error("Error: El valor proporcionado no es válido")
+    // Seleccionar o deseleccionar citas
+    selectItems: (idAppointment: number) => {
+        if (typeof idAppointment !== "number" || isNaN(idAppointment)) {
+            console.error("Error: El id proporcionado no es valido.")
             return
         }
-    
+
         set(
             produce((state: AppointmentStore) => {
                 // Si el elemento seleccionado ya es el mismo en `currentSelection`, lo deselecciona
-                if (state.currentSelection?.title === value) {
-                    // Desmarcar todos los elementos
-                    state.currentSelection = null
-                    state.appointments = state.appointments.map((item) => ({
-                        ...item,
-                        selectItem: false,
-                    }))
+                const isCurrentlySelected = state.currentSelection?.id === idAppointment
+                
+                state.appointments = state.appointments.map((item) => ({
+                    ...item,
+                    selectItem: item.id === idAppointment && !isCurrentlySelected,
+                }))
 
-                // Actualiza los elementos seleccionados y establece el nuevo `currentSelection`
-                } else {
-                    state.appointments = state.appointments.map((item) => ({
-                        ...item,
-                        selectItem: item.title === value,
-                    }))
+                state.currentSelection = isCurrentlySelected
+                ? null
+                : state.appointments.find((item) => item.id === idAppointment) || null
+            })
+        )
+    },
 
-                    state.currentSelection = state.appointments.find(
-                        (item) => item.title === value
-                    ) || null
+    // Añadir una nueva cita
+    addAppointment: (appointment: Appointment) => {
+        if (!appointment.id || !appointment.title) {
+            console.error("Error: La cita debe contener un id y un titulo validos.")
+            return
+        }
+
+        set(
+            produce((state: AppointmentStore) => {
+                const exists = state.appointments.some((item) => item.id === appointment.id)
+                if (exists) {
+                    console.error("Error: Ya existe una cita con el mismo id.")
+                    return
+                }
+
+                state.appointments.push({ ...appointment, selectItem: false })
+            })
+        )
+    },
+
+    // Editar una cita existente
+    editAppointment: (idAppointment: number, updatedFields: Partial<Appointment>) => {
+        set(
+            produce((state: AppointmentStore) => {
+                const index = state.appointments.findIndex((item) => item.id === idAppointment)
+                if (index === -1) {
+                    console.error("Error: No se encontro la cita con el id especificado.")
+                    return
+                }
+                
+                state.appointments[index] = {
+                    ...state.appointments[index],
+                    ...updatedFields,
+                }
+
+                if (state.currentSelection?.id === idAppointment) {
+                    state.currentSelection = state.appointments[index]
                 }
             })
         )
     },
 
-    currentSelection: null,
+    // Eliminar una cita
+    deleteAppointment: (idAppointment: number) => {
+        set(
+            produce((state: AppointmentStore) => {
+                const index = state.appointments.findIndex((item) => item.id === idAppointment)
+                if (index === -1) {
+                    console.error("Error: No se encontro la cita con el id especificado.")
+                    return
+                }
+
+                state.appointments.splice(index, 1)
+
+                if (state.currentSelection?.id === idAppointment) {
+                    state.currentSelection = null
+                }
+            })
+        )
+    },
 })))
