@@ -12,9 +12,9 @@ export default function Layout() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset className="w-full">
-        <Header label="Inicio" href="#"/>
+        <Header label="Calendario" href="calendar"/>
         <div className="flex flex-1 flex-col p-2 h-screen">
-          <div className="flex-1 rounded-xl bg-gray-200 items-center justify-center gap-4 p-2 pl-1">
+          <div className="flex-1 rounded-xl bg-gray-50 items-center justify-center gap-4 p-2 pl-1">
             {/* Encabezado botones de interaccion */}
             <ButtonAppointment/>
             {/* Contenido de las cartas con interaccion de carousel */}

@@ -26,10 +26,10 @@ const data = {
 
 // Menu items.
 const items = [
-  { title: "Inicio", url: "#", icon: Home, },
-  { title: "Notificaciones", url: "#", icon: Inbox, },
-  { title: "Calendario", url: "#", icon: Calendar, },
-  { title: "Configuracion", url: "#", icon: Settings, },
+  { title: "Inicio", url: "home", icon: Home, },
+  { title: "Notificaciones", url: "notification", icon: Inbox, },
+  { title: "Calendario", url: "calendar", icon: Calendar, },
+  { title: "Configuracion", url: "config", icon: Settings, },
 ]
  
 export function AppSidebar() {
