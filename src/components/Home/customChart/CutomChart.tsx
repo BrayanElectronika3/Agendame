@@ -1,37 +1,55 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
 
-import './CustomChart-module.css'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+
+const chartData = [
+  { month: "Enero", desktop: 20 },
+  { month: "Febrero", desktop: 30 },
+  { month: "Marzo", desktop: 10 },
+  { month: "Abril", desktop: 5 },
+  { month: "Mayo", desktop: 35 },
+  { month: "Junio", desktop: 20 },
+]
+
+const chartConfig = {
+  desktop: {
+    label: "Agendamientos",
+    color: "black",
+  },
+} satisfies ChartConfig
 
 export const CustomChart = () => {
   return (
-    <div className="flex gap-2">
-        <Card className="flex flex-col w-full md:w-1/3 p-2 shadow-md">
-            <CardHeader className="items-center text-center">
-                <CardTitle className="font-bold text-2xl">Proximo agendamiento</CardTitle>
-                <CardDescription>{new Date().toLocaleString().toString()}</CardDescription>
-            </CardHeader>
-            <CardContent className="flex items-center justify-center p-5">
-                <div className="flex items-center justify-center w-40 h-40 bg-gradient-to-br from-blue-100 via-blue-300 to-blue-500 rounded-full bounce-limited">
-                    <span className="text-4xl font-bold text-gray-900">Cita 10</span>
-                </div>
-            </CardContent>
-            <CardFooter className="flex flex-col items-center text-sm text-gray-600">
-                Recuerda llegar con antelación a la hora programada
-            </CardFooter>
-        </Card>
+    <Card className="overflow-hidden border-none shadow-none">
+        <CardHeader className="items-center text-center p-2">
+            <CardTitle className="text-2xl md:text-2xl lg:text-2xl xl:text-2xl 2xl:text-3xl font-bold">Historial de citas</CardTitle>
+            <CardDescription className="text-sm md:text-sm lg:text-base xl:text-base 2xl:text-lg truncate">{new Date().toLocaleString().toString()}</CardDescription>
+        </CardHeader>
 
-        <Card className="flex flex-col w-full md:w-2/3 p-2 shadow-md">
-            <CardHeader className="items-center text-center">
-                <CardTitle className="font-bold text-2xl">Noticias</CardTitle>
-                <CardDescription>{new Date().toLocaleString().toString()}</CardDescription>
-            </CardHeader>
-            <CardContent className="flex items-center justify-center p-5">
-                <h1>Hola aca te presento la noticia</h1>
-            </CardContent>
-            <CardFooter className="flex flex-col items-center text-sm text-gray-600">
-                Noticia # 10
-            </CardFooter>
-        </Card>
-    </div>
+        <CardContent className="p-2">
+            <ChartContainer config={chartConfig}>
+            <BarChart accessibilityLayer data={chartData}>
+                <CartesianGrid vertical={false} />
+                <XAxis
+                dataKey="month"
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+                tickFormatter={(value) => value.slice(0, 3)}
+                />
+                <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+                />
+                <Bar dataKey="desktop" fill="var(--color-desktop)" radius={8} />
+            </BarChart>
+            </ChartContainer>
+        </CardContent>
+
+        <CardFooter className="text-sm md:text-sm lg:text-sm xl:text-base 2xl:text-lg text-center text-gray-600 p-2 justify-center">
+            Agendamiento de citas en los últimos 6 meses
+        </CardFooter>
+    </Card>
   )
 }
