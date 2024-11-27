@@ -13,16 +13,16 @@ export const CustomButton = () => {
 
   return (
     <>
-        <Button className="flex items-center justify-center w-full h-full" onClick={handleClickRefresh}>
+        <Button className="flex items-center justify-center w-2/3 h-2/3" onClick={handleClickRefresh}>
           <RefreshCw style={{ width: "60%", height: "60%" }} />
         </Button>
-        <Button className="flex items-center justify-center w-full h-full" onClick={handleClickBell}>
+        <Button className="flex items-center justify-center w-2/3 h-2/3" onClick={handleClickBell}>
           <Bell style={{ width: "60%", height: "60%" }} />
         </Button>
-        <Button className="flex items-center justify-center w-full h-full" onClick={handleClickCalendar}>
+        <Button className="flex items-center justify-center w-2/3 h-2/3" onClick={handleClickCalendar}>
           <Calendar style={{ width: "60%", height: "60%" }} />
         </Button>
-        <Button className="flex items-center justify-center w-full h-full" onClick={handleClickConfig}>
+        <Button className="flex items-center justify-center w-2/3 h-2/3" onClick={handleClickConfig}>
           <Settings style={{ width: "60%", height: "60%" }} />
         </Button>
     </>

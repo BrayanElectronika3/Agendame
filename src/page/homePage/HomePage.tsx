@@ -27,7 +27,7 @@ export default function Layout() {
               </div>
             </div>
             {/* Botones de interacción pc */}
-            <div className="aspect-square sm:aspect-auto lg:aspect-square rounded-xl bg-muted/50 grid gap-6 grid-cols-4 grid-rows-1 sm:grid-cols-2 sm:grid-rows-2 lg:grid-cols-2 lg:grid-rows-2 visible max-lg:hidden">
+            <div className="place-items-center items-center justify-center aspect-square sm:aspect-auto lg:aspect-square rounded-xl bg-muted/50 grid gap-6 grid-cols-4 grid-rows-1 sm:grid-cols-2 sm:grid-rows-2 lg:grid-cols-2 lg:grid-rows-2 visible max-lg:hidden">
               <CustomButton/>
             </div>
           </div>
